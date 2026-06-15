@@ -145,3 +145,4 @@ Output:
 This project demonstrates how NLP and logical rules can be used to classify question difficulty effectively. It serves as a foundation for intelligent assessment systems.
 
 ---
+<img width="1500" height="995" alt="image" src="https://github.com/user-attachments/assets/bfd997ca-64a9-4fd1-ba8c-ed5366ae7859" />
