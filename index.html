@@ -1,1 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Question Difficulty Analyzer</title>
 
+    <style>
+        body {
+            margin: 0;
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            color: #333;
+        }
+
+        .card {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            width: 400px;
+            text-align: center;
+            box-shadow: 0px 10px 30px rgba(0,0,0,0.2);
+            animation: fadeIn 1s ease;
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            margin-bottom: 20px;
+            font-size: 16px;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            background: #667eea;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #5a67d8;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .easy { color: green; }
+        .medium { color: orange; }
+        .hard { color: red; }
+
+        .loader {
+            display: none;
+            margin-top: 10px;
+        }
+
+        @keyframes fadeIn {
+            from {opacity: 0; transform: translateY(20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>🤖 AI Difficulty Analyzer</h2>
+
+    <input type="text" id="question" placeholder="Type your question...">
+
+    <button onclick="predict()">Analyze</button>
+
+    <div class="loader" id="loader">⏳ Analyzing...</div>
+
+    <div id="result"></div>
+</div>
+
+<script>
+async function predict() {
+    let question = document.getElementById("question").value;
+    let resultDiv = document.getElementById("result");
+    let loader = document.getElementById("loader");
+
+    if (question.trim() === "") {
+        resultDiv.innerText = "⚠ Please enter a question";
+        return;
+    }
+
+    loader.style.display = "block";
+    resultDiv.innerText = "";
+
+    let response = await fetch("http://127.0.0.1:5000/predict", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ question: question })
+    });
+
+    let data = await response.json();
+
+    loader.style.display = "none";
+
+    let difficulty = data.difficulty.toLowerCase();
+
+    resultDiv.className = difficulty;
+    resultDiv.innerText = "Difficulty: " + data.difficulty;
+}
+
+// ENTER key support
+document.getElementById("question").addEventListener("keypress", function(e) {
+    if (e.key === "Enter") {
+        predict();
+    }
+});
+</script>
+
+</body>
+</html>
