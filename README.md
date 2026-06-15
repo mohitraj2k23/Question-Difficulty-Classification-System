@@ -115,17 +115,8 @@ python main.py
 
 ## 🧪 Example
 
-Input:
+<img width="1500" height="995" alt="image" src="https://github.com/user-attachments/assets/303009f0-1685-4ffc-8725-a5814281ed15" />
 
-```
-Explain Ohm's Law
-```
-
-Output:
-
-```json
-{
-  "difficulty": "Medium"
 }
 ```
 
@@ -145,4 +136,3 @@ Output:
 This project demonstrates how NLP and logical rules can be used to classify question difficulty effectively. It serves as a foundation for intelligent assessment systems.
 
 ---
-<img width="1500" height="995" alt="image" src="https://github.com/user-attachments/assets/bfd997ca-64a9-4fd1-ba8c-ed5366ae7859" />
