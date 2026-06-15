@@ -1,11 +1,14 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.linear_model import LogisticRegression
+import os
 
 app = Flask(__name__)
+CORS(app)
 
 # -----------------------------
-# 📚 Training Dataset (Expandable)
+# 📚 Dataset
 # -----------------------------
 questions = [
     "What is voltage?",
@@ -32,7 +35,7 @@ labels = [
 ]
 
 # -----------------------------
-# 🤖 ML Model Training
+# 🤖 ML Model
 # -----------------------------
 vectorizer = TfidfVectorizer()
 X = vectorizer.fit_transform(questions)
@@ -41,7 +44,7 @@ model = LogisticRegression()
 model.fit(X, labels)
 
 # -----------------------------
-# 🧠 Rule-Based Logic (Hybrid)
+# 🧠 Rule-Based Logic
 # -----------------------------
 def classify_with_rules(question):
     q = question.lower()
@@ -61,7 +64,7 @@ def classify_with_rules(question):
     return None
 
 # -----------------------------
-# 🌐 API Route
+# 🌐 Routes
 # -----------------------------
 @app.route('/')
 def home():
@@ -72,23 +75,23 @@ def predict():
     data = request.get_json()
     question = data.get("question", "")
 
-    # Safety check
     if question.strip() == "":
         return jsonify({"difficulty": "Medium"})
 
-    # Rule-based prediction first
+    # Rule first
     rule_result = classify_with_rules(question)
     if rule_result:
         return jsonify({"difficulty": rule_result})
 
-    # ML prediction
+    # ML fallback
     q_vec = vectorizer.transform([question])
     prediction = model.predict(q_vec)[0]
 
     return jsonify({"difficulty": prediction})
 
 # -----------------------------
-# ▶ Run Server
+# ▶ Run Server (Production Ready)
 # -----------------------------
 if __name__ == '__main__':
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port)
